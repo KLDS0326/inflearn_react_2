@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import ReadComponent from "../../components/todo/readComponent";
+import ReadComponent from "../../components/todo/ReadComponent";
 
 function ReadPage() {
     const {tno} = useParams()
