@@ -11,6 +11,7 @@ interface UseCustomMoveReturn {
     
     page: number
     size: number
+    refresh: boolean
 }
 
 

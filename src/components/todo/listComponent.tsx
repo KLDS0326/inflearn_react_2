@@ -4,7 +4,7 @@ import { getList } from "../../assets/api/todoApi";
 import PageComponent from "../common/pageComponent";
 
 function ListComponent() {
-    const {page, size, moveToRead,moveToList}:UseCustomMoveReturn = useCustomMove()
+    const {page, size, refresh, moveToRead,moveToList}:UseCustomMoveReturn = useCustomMove()
     const [serverData, setServerData] = useState<PageResponseDTO<Todo>|undefined>()
 
     useEffect( ()=> {
@@ -14,10 +14,8 @@ function ListComponent() {
         })
 
 
-    },[page,size])
-    
-    
-    
+    },[page,size,refresh])
+
     return (
     <div className="border-2 border-blue-100 mt-10 mr-2 ml-2">
         {serverData &&
