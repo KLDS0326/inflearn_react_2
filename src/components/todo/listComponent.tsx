@@ -14,7 +14,7 @@ function ListComponent() {
         })
 
 
-    },[page,size,refresh])
+    },[page,size,refresh ])
 
     return (
     <div className="border-2 border-blue-100 mt-10 mr-2 ml-2">
