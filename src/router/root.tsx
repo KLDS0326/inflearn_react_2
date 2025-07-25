@@ -3,6 +3,7 @@ import { createBrowserRouter} from 'react-router';
 import { lazy, Suspense } from "react";
 import BasicLayout from '../layouts/basicLayout';
 import todoRouter from './todoRouter';
+import productsRouter from './productRouters';
 
 const Loading = () => <div>Loading....</div> //COMPONENT
 
@@ -24,7 +25,8 @@ const router = createBrowserRouter([
         //suspense분할로딩임. 빼면 모두 호출. 
         element: <Suspense fallback={<Loading/>}> <About/> </Suspense>
      },
-     todoRouter()
+     todoRouter(),
+     productsRouter()
 
    
     ]
