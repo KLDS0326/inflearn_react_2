@@ -1,14 +1,45 @@
-import { useState } from "react";
+import { useActionState, useState, type MouseEvent } from "react";
 import useCustomMove from "../../hooks/useCustomMove";
+import axios from "axios";
+import PendingModal from "../common/pendingModal";
+import ResultModal from "../common/resultModal";
+
+interface ProductTaskResult {
+  actionType: string, //상태 값 
+  result: string,
+  error? : string 
+}
+const initState: ProductTaskResult = {
+  actionType: 'modify', //초기값 
+  result: ""
+}
+
+const modifyDeleteAsyncAction = async ( state:ProductTaskResult, formData:FormData): Promise<ProductTaskResult> => {
+  const pno = formData.get("pno")
+  const actionType = formData.get("actionType") as string
+  let res;
+  if(actionType ==='modify'){
+   res = await axios.put(`http://localhost:8080/api/products/${pno}`, formData )
+   
+ }else if(actionType ==='delete') {
+   res = await axios.delete(`http://localhost:8080/api/products/add/${pno}` )
+ }
+ 
+ return { actionType: actionType, result: res?.data?.RESULT}
+}
+
+
+
 
 function ModifyComponent({product} : {product : ProductDTO}) {
-
-    const {moveToList} = useCustomMove()
+    const [state, action, isPending] = useActionState(modifyDeleteAsyncAction, initState)
+    const {moveToList, moveToRead} = useCustomMove()
     const [images, setImages] = useState<string[]> (product.uploadFileNames)
-    //const deleteOldImages = (event: MouseEvent<HTMLButtonElement> , target: string) => {
-    const deleteOldImages = (target: string) => {
-        //event.preventDefault()
-        //event.stopPropagation()
+    const deleteOldImages = (event: MouseEvent , target: string) => {
+    //const deleteOldImages = (event: MouseEvent, target: string) => {
+        event.preventDefault()
+        event.stopPropagation()
+
         setImages(prev => prev.filter(img => img !== target));
      };
 
@@ -16,7 +47,19 @@ function ModifyComponent({product} : {product : ProductDTO}) {
 
     return (  
         <div className = "border-2 border-sky-200 mt-10 m-2 p-4 bg-white">
-  <form>
+          
+        {isPending && <PendingModal/>} 
+        {state.result && <ResultModal  title = "처리완료" content = "처리완료" callbackFn={() => {
+            if (state.actionType ==='modify') {
+              moveToRead(product.pno)
+            }
+            if(state.actionType === 'delete') {
+              moveToList()
+            }
+           }}  /> 
+        }
+        
+  <form action={action}>
   <div className="flex justify-center mt-10">
     <div className="relative mb-4 flex w-full flex-wrap items-stretch">
      <div className="w-1/5 p-6 text-right font-bold">PNO</div>
@@ -68,7 +111,7 @@ function ModifyComponent({product} : {product : ProductDTO}) {
        className="flex justify-center flex-col w-1/3" 
        key = {i}>
        <button className="bg-blue-500 text-3xl text-white" 
-       onClick={() => deleteOldImages(imgFile)}>DELETE</button>
+       onClick={(event) => deleteOldImages(event, imgFile)}>DELETE</button>
        <img 
        alt ="img" 
        src={`http://localhost:8080/api/products/view/s_${imgFile}`}/>
