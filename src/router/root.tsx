@@ -4,6 +4,7 @@ import { lazy, Suspense } from "react";
 import BasicLayout from '../layouts/basicLayout';
 import todoRouter from './todoRouter';
 import productsRouter from './productRouters';
+import memberRouter from './memberRouter';
 
 const Loading = () => <div>Loading....</div> //COMPONENT
 
@@ -27,10 +28,9 @@ const router = createBrowserRouter([
      },
      todoRouter(),
      productsRouter()
-
-   
     ]
-   }
+   },
+   memberRouter()
   ]);
 
 
