@@ -29,7 +29,12 @@ export const getAccessToken = async (authCode:string) => {
       code:authCode,
       client_secret: client_secret
    } 
-const res = await axios.post(access_token_url, params , header)
-const accessToken = res.data.access_token
-return accessToken
+    const res = await axios.post(access_token_url, params , header)
+    const accessToken = res.data.access_token
+    return accessToken
+}
+
+export const getMemberWithAccessToken = async(accessToken:string) => {
+    const res = await axios.get(`http://localhost:8080/api/member/kakao?accessToken=${accessToken}`)
+    return res.data
 }

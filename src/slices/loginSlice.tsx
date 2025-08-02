@@ -34,13 +34,17 @@ const loginSlice = createSlice( {
  reducers: {
 
     save: (state, action)  => {
-        console.log("save.......")
-        return action.payload
+        const payload = action.payload  //{소셜로그인 회원이 사용}          
+        const newState = {...payload, status: 'saved'}
+        setCookie("member",JSON.stringify(newState), 1) //1일
+        return payload
     },
 
     logout: (state, action) => {
        console.log("logout")
        removeCookie("member")
+
+       return {...initState}
     }
  },
  extraReducers : (builder) =>{
