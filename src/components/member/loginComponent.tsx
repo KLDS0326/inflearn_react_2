@@ -6,6 +6,7 @@ import { loginPostAsync } from "../../slices/loginSlice";
 import { useNavigate } from "react-router";
 import ResultModal from "../common/resultModal";
 import useCustomLogin from "../../hooks/useCustomLogin";
+import KakaoLoginComponent from "./kakaoLoginComponent";
 
 interface LoginResult {
  email: string,
@@ -67,6 +68,7 @@ function LoginComponent() {
        </div>
       </div>
       </div> 
+      <KakaoLoginComponent/>
  </div>
  )
 
