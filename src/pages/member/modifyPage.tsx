@@ -1,3 +1,4 @@
+import ModifyComponent from "../../components/member/modifyComponent"
 import BasicMenu from "../../components/menus/bascMenu"
 
 function ModifyPage () {
@@ -9,7 +10,7 @@ function ModifyPage () {
         <main className="bg-sky-300 md:w-4/5 lg:w-3/4 px-5 py-5">
          <div className=" text-3xl">Member Modify Page</div>
          <div className="bg-white w-full mt-4 p-2">
-            
+            <ModifyComponent/>
          </div>   
          </main>    
       
