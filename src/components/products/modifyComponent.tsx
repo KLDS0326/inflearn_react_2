@@ -1,8 +1,8 @@
 import { useActionState, useState, type MouseEvent } from "react";
 import useCustomMove from "../../hooks/useCustomMove";
-import axios from "axios";
 import PendingModal from "../common/pendingModal";
 import ResultModal from "../common/resultModal";
+import jwtAxios from "../../util/jwtUtil";
 
 interface ProductTaskResult {
   actionType: string, //상태 값 
@@ -19,10 +19,10 @@ const modifyDeleteAsyncAction = async ( state:ProductTaskResult, formData:FormDa
   const actionType = formData.get("actionType") as string
   let res;
   if(actionType ==='modify'){
-   res = await axios.put(`http://localhost:8080/api/products/${pno}`, formData )
+   res = await jwtAxios.put(`http://localhost:8080/api/products/${pno}`, formData )
    
  }else if(actionType ==='delete') {
-   res = await axios.delete(`http://localhost:8080/api/products/add/${pno}` )
+   res = await jwtAxios.delete(`http://localhost:8080/api/products/add/${pno}` )
  }
  
  return { actionType: actionType, result: res?.data?.RESULT}
