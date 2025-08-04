@@ -1,7 +1,25 @@
+import useCustomCart from "../../hooks/useCustomCart";
 import useCustomMove from "../../hooks/useCustomMove";
 
 function ReadComponent({product} :{product:ProductDTO}) {
     const {moveToList, moveToModify} = useCustomMove()
+    const {changeCart, cartItems} = useCustomCart()
+    const handleClickAddCart = () => {    
+       const addedItem = cartItems.items.filter(item => item.pno === product.pno)[0]
+       if(addedItem) {
+           if(window.confirm("이미 추가된 상품입니다. 추가하시겠습니까?") === false){
+             return
+           } 
+       }
+       if(addedItem) {
+           changeCart(addedItem.cino, product.pno,1)
+       }else {
+           changeCart(null, product.pno, 1)
+       }
+     }
+
+
+
     console.log(product)
 
     return (  
@@ -56,10 +74,14 @@ function ReadComponent({product} :{product:ProductDTO}) {
   />
 ))}
    </div>
+   <button type="button" 
+        className="inline-block rounded p-4 m-2 text-xl w-32 text-white bg-green-500"
+        onClick={() => handleClickAddCart()} > Add Cart </button>
+
    
    <div className="flex justify-end p-4">
     <button type="button" 
-     className="inline-block rounded p-4 m-2 text-xl w-32  text-white bg-red-500"
+     className="inline-block rounded p-4 m-2 text-xl w-32 text-white bg-red-500"
      onClick={() => moveToModify(product.pno)}
     >
      Modify
