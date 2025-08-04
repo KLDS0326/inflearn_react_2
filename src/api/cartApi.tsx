@@ -7,7 +7,7 @@ export const getCartItems = async ( ) : Promise<CartItemResponse[]> => {
 }
 
 
-// export const postChangeCart = async (cartItem:CartItemRequest) => {
-// const res = await jwtAxios.post(`${host}/change`, cartItem)
-// return res.data
-//}
+export const postChangeCart = async (cartItem:CartItemRequest) => {
+    const res = await jwtAxios.post(`${host}/change`, cartItem)
+    return res.data
+}
