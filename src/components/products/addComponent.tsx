@@ -3,6 +3,7 @@ import PendingModal from "../common/pendingModal"
 import ResultModal from "../common/resultModal"
 import useCustomMove from "../../hooks/useCustomMove"
 import jwtAxios from "../../util/jwtUtil"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface ProductAddResult {
     result: number,
@@ -14,21 +15,46 @@ const initState: ProductAddResult = {
 }
 
 //action 처리 함수
-const addAsyncAction = async (state: ProductAddResult, formData : FormData) => {
-    console.log("addAsyncAction....")
-    await new Promise(resolve => setTimeout(resolve, 2000))
+// const addAsyncAction = async (state: ProductAddResult, formData : FormData) => {
+//     console.log("addAsyncAction....")
+//     await new Promise(resolve => setTimeout(resolve, 2000))
     
-    const pname = formData.get("pname") as string 
-    if(!pname) {
-        return {result:0, error: "Insert Product Name"}
-    }
-    const res = await jwtAxios.post('http://localhost:8080/api/products/', formData )
-        return {result: res.data.result}
+//     const pname = formData.get("pname") as string 
+//     if(!pname) {
+//         return {result:0, error: "Insert Product Name"}
+//     }
+//     const res = await jwtAxios.post('http://localhost:8080/api/products/', formData )
+//         return {result: res.data.result}
+// }
+const addProduct = async (formData: FormData) => {
+  const res = await jwtAxios.post('http://localhost:8080/api/products/', formData)
+  return { result: res.data.result }
 }
 
+
+
 function AddComponent() {
-    const [state, action, isPending] = useActionState(addAsyncAction, initState )
+    // const [state, action, isPending] = useActionState(addAsyncAction, initState )
     const {moveToList} = useCustomMove()
+    const queryClient = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: addProduct,
+        onSuccess: (data) => {
+            console.log("---------------------------")
+            console.log(data)
+            queryClient.invalidateQueries({
+            queryKey: ['products/list'],
+            exact: false
+            })
+        }
+    })
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+        mutation.mutate(formData)
+    }
+
     const closeModal = () => {
         moveToList()
     } 
@@ -36,13 +62,20 @@ function AddComponent() {
 
     return ( 
         <div className = "border-2 border-sky-200 mt-10 m-2 p-4"> 
-            {isPending && <PendingModal/>}
-            {state.result !== 0 && <ResultModal 
+            {mutation.isPending && <PendingModal />}
+            {mutation.data?.result &&     
+               <ResultModal
+                    title="상품 추가 결과"
+                    content={`새로운 ${mutation.data.result} 상품 추가됨`}
+                    callbackFn={closeModal}
+               />
+            }
+            {/* {state.result !== 0 && <ResultModal 
                                         title="상품 추가 결과" 
                                         content={`새로운 ${state.result} 상품 추가됨`} 
-                                        callbackFn={closeModal}/>}
+                                        callbackFn={closeModal}/>} */}
                 <h1>Add Component</h1>
-                <form action={action}>
+                <form onSubmit={handleSubmit}>
                  <div className="flex justify-center">
                       <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                       <div className="w-1/5 p-6 text-right font-bold">Product Name</div>
