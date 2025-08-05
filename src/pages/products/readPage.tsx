@@ -38,7 +38,7 @@ function ReadPage() {
      return (
         <div className="w-full">
             {isPending && <PendingModal/>}
-            <div>Product Read</div>
+                <div>Product Read</div>
             
             {product && 
                 <ReadComponent product={product}></ReadComponent>

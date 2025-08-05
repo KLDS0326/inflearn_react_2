@@ -66,13 +66,12 @@ function ReadComponent({product} :{product:ProductDTO}) {
     )} */}
 
     {(product.uploadFileNames ?? []).map((imgFile, i) => (
-  <img 
-    alt="product"
-    key={i}
-    className="p-4 w-1/2" 
-    src={`http://localhost:8080/api/products/view/${imgFile}`}
-  />
-))}
+      <img 
+        alt="product"
+        key={i}
+        className="p-4 w-1/2" 
+        src={`http://localhost:8080/api/products/view/s_${imgFile}`}/>
+    ))}
    </div>
    <button type="button" 
         className="inline-block rounded p-4 m-2 text-xl w-32 text-white bg-green-500"
