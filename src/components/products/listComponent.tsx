@@ -1,9 +1,33 @@
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import useCustomMove from "../../hooks/useCustomMove";
 import PageComponent from "../common/pageComponent";
 
 //function ListComponent({serverData} : {serverData:PageResponseDTO<ProductDTO>}) {
 function ListComponent({serverData}: {serverData:PageResponseDTO<ProductDTO>}) {    
-    const {moveToList, moveToRead} = useCustomMove()
+    const {page, size, moveToList, moveToRead} = useCustomMove()
+    const queryClient = useQueryClient()
+    const moveCheckPage = (pageParam: PageParam) => {
+       const pageValue = pageParam.page
+       const sizeValue = pageParam.size ? pageParam.size : 10 
+
+       if (pageValue == page  && sizeValue === size) {
+              if (!confirm("same page call again?")) {
+                     return 
+              }
+
+              queryClient.invalidateQueries({
+                     queryKey : ['products/list'],
+                     exact: false
+              })
+       }
+
+
+       console.log("=============================");
+       moveToList(pageParam)
+       
+    }
+
+
     return (  
            <div className="border-2 border-blue-100 mt-10 mr-2 ml-2 text-2xl">
              <div className="flex flex-wrap mx-auto p-6 bg-white">
@@ -42,7 +66,10 @@ function ListComponent({serverData}: {serverData:PageResponseDTO<ProductDTO>}) {
       )}
      </div>
   
-     <PageComponent serverData={serverData} movePage={moveToList}></PageComponent>
+     <PageComponent 
+              serverData={serverData} 
+              movePage={moveCheckPage}>
+     </PageComponent>
   
     </div>
  );
