@@ -39,7 +39,7 @@ function LoginComponent() {
     <div className = "border-2 border-sky-200 mt-10 m-2 p-4">
    {loginStatus === 'pending' && <div className="bg-amber-300">로그인 중...</div>}
    {loginStatus === 'fulfilled' && <ResultModal title="Login Result" content="로그인 되었습니다." callbackFn={closeModal} />}
-   {loginStatus === 'rejected' && <div className="bg-red-300">로그인 실패</div>}
+   {/* {loginStatus === 'rejected' && <div className="bg-red-300">로그인 실패</div>} */}
       <div className="flex justify-center">
       <div className="text-4xl m-4 p-4 font-extrabold text-blue-500">Login Component</div>
       </div> 
